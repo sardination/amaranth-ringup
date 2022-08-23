@@ -34,11 +34,8 @@ export class LoginFormComponent implements OnInit {
       this.loginForm.value.password
     ).subscribe(
       loggedIn => {
-        // this.formError = null;
         if (loggedIn) {
           this.router.navigateByUrl("");
-        } else {
-          // this.formError = "No user with this information has been found. Please check information and try again."
         }
       }
     );
