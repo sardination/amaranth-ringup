@@ -50,8 +50,7 @@ class LoginController extends AbstractController {
             Check if user exists in db with given full name and password.
             Username and password are case-sensitive
         */
-        $username_hash = "4663e84fea2915e34413e6710715d59f54caf9bc"; // indhu
-        // $password_hash = "227115a26394e6c2934adef54ca12aedc9335133"; // amaranth22814whr
+        $username_hash = "4663e84fea2915e34413e6710715d59f54caf9bc"; // TEMP - indhu
         $password_hash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"; // TEMP - password
 
         $input = (array) json_decode(file_get_contents('php://input'), TRUE);
@@ -65,6 +64,7 @@ class LoginController extends AbstractController {
         $this->session->setIsLoggedIn(true);
 
         $response['status_code_header'] = 'HTTP/1.1 200 OK';
+        $response['body'] = true;
         return $response;
     }
 
