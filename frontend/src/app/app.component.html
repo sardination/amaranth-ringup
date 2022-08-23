@@ -1,1 +1,21 @@
+<nav>
+    <ul>
+        <li class="nav-header">
+            <h2>Amaranth Acres Ringup</h2>
+        </li>
+        <li *ngIf="loggedIn">
+            <a routerLink="/">Ring Up</a>
+        </li>
+        <li *ngIf="loggedIn">
+            <a routerLink="/edit">Edit Product List</a>
+        </li>
+    </ul>
+</nav>
+
 <router-outlet></router-outlet>
+
+<footer class="footer">
+    <div>
+        <span><small>Amaranth Acres&copy; 2022 </small></span>
+    </div>
+</footer>

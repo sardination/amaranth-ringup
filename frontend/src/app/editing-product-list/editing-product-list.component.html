@@ -1,6 +1,6 @@
 <div class="card-body">
     <div class="col-sm-6">
-        <button class="button-margin" (click)="addEmptyProduct()">Add Product</button>
+        <button mat-raised-button class="button-margin" (click)="addEmptyProduct()">Add New Product</button>
     </div>
 
     <div class="table-container-400">
@@ -55,12 +55,12 @@
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let product">
                     <div *ngIf="editingProduct && product === editingProduct; else showEdit">
-                        <button mat-button (click)="saveEditingProduct()">
+                        <button mat-raised-button (click)="saveEditingProduct()">
                             <fa-icon [icon]="faCheck"></fa-icon>
                         </button>
                     </div>
                     <ng-template #showEdit>
-                        <button mat-button (click)="selectEditingProduct(product)">
+                        <button mat-raised-button (click)="selectEditingProduct(product)">
                             <fa-icon [icon]="faEdit"></fa-icon>
                         </button>
                     </ng-template>
@@ -71,12 +71,12 @@
                 <th mat-header-cell *matHeaderCellDef></th>
                 <td mat-cell *matCellDef="let product">
                     <div *ngIf="editingProduct && product === editingProduct; else showDelete">
-                        <button mat-button (click)="cancelEditProduct()">
+                        <button mat-raised-button (click)="cancelEditProduct()">
                             <fa-icon [icon]="faTimes"></fa-icon>
                         </button>
                     </div>
                     <ng-template #showDelete>
-                        <button mat-button (click)="deleteProduct(product)">
+                        <button mat-raised-button (click)="openDeleteProductDialog(product)">
                             <fa-icon [icon]="faTrash"></fa-icon>
                         </button>
                     </ng-template>
