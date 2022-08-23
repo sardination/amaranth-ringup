@@ -27,6 +27,10 @@ export class LoginGuard implements CanActivate {
         if (!loggedIn && route.routeConfig.path != "login") {
           return this.router.parseUrl('login');
         }
+        // Redirect to ringup of logged in
+        if (loggedIn && route.routeConfig.path == "login") {
+          return this.router.parseUrl('');
+        }
         return true;
       })
     );
