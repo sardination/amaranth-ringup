@@ -1,9 +1,7 @@
 <?php
-$servername = "localhost";
+include("credentials.php");
 
-$username = "suriya"; // DEV
-$password = ""; // DEV
-$dbname = "amaranth_ringup"; // DEV
+$servername = "localhost";
 
 // Create connection
 $dsn = 'mysql:dbname=' . $dbname . ';host=' . $servername;
