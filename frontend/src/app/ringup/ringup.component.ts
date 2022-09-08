@@ -9,7 +9,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 interface RingupProduct {
   product: Product;
-  amount: number;
+  quantity: number;
 }
 
 @Component({
@@ -21,13 +21,13 @@ export class RingupComponent implements OnInit {
 
   faTimes = faTimes;
 
-  columnsToDisplay = ['name', 'unit_price', 'amount', 'delete'];
+  columnsToDisplay = ['name', 'unit_price', 'quantity', 'delete'];
   tableDataSource: MatTableDataSource<RingupProduct>;
 
   availableProducts : Product[] = [];
   ringupProducts : RingupProduct[] = [];
 
-  selectedNewProduct : Product = new Product(-1, "", 0, "");
+  selectedNewProduct : Product = new Product(-1, "", 0, "lb");
 
   constructor(
     private productService: ProductService
@@ -54,7 +54,7 @@ export class RingupComponent implements OnInit {
   ringupTotal() : number {
     var total = 0;
     this.ringupProducts.forEach(function(ringupProduct) {
-      total += ringupProduct.amount * ringupProduct.product.unit_price;
+      total += ringupProduct.quantity * ringupProduct.product.unit_price;
     });
     return total;
   }
@@ -62,7 +62,7 @@ export class RingupComponent implements OnInit {
   addRingupProduct() : void {
     var newRingupProduct: RingupProduct = {
       product: this.selectedNewProduct,
-      amount: 0
+      quantity: 0
     };
 
     this.ringupProducts.push(newRingupProduct);

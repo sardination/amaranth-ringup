@@ -51,7 +51,7 @@ export class EditingProductListComponent implements OnInit {
   }
 
   addEmptyProduct(): void {
-    var emptyProduct : Product = new Product(-1, "", 0, "");
+    var emptyProduct : Product = new Product(-1, "", 0, "lb");
     this.editingProduct = emptyProduct;
     this.tableDataSource.data = [emptyProduct].concat(this.products);
   }
