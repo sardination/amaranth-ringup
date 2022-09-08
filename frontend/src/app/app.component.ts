@@ -14,7 +14,13 @@ export class AppComponent {
 
   constructor(
     private loginService: LoginService
-  ) {}
+  ) {
+    this.loginService.loginChangeEmitter.subscribe(
+      loggedIn => {
+        this.loggedIn = loggedIn;
+      }
+    )
+  }
 
   ngOnInit() {
     this.loginService.getIsLoggedIn()

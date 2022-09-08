@@ -36,7 +36,7 @@ export class RingupComponent implements OnInit {
     this.productService.getAllProducts()
         .subscribe(products => {
           this.availableProducts = products;
-          this.availableProducts.push(new Product(-1, "Other", 0, ""));
+          this.availableProducts.push(new Product(-1, "Other", 0, "lb"));
         })
   }
 

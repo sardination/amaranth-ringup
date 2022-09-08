@@ -20,7 +20,6 @@ export class LoginFormComponent implements OnInit {
     private router: Router,
     private loginService: LoginService,
   ) {
-
   }
 
   ngOnInit(): void {

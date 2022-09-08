@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, of } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { SHA1, enc } from 'crypto-js';
 
@@ -14,6 +14,9 @@ export class LoginService {
 
   private queryURL = `${environment.apiBase}/login`;
 
+  private loginChangeSource = new Subject<boolean>();
+  loginChangeEmitter = this.loginChangeSource.asObservable();
+
   constructor(private http: HttpClient) { }
 
   login(username: string, password: string): Observable<boolean> {
@@ -22,6 +25,10 @@ export class LoginService {
     return this.http.post<boolean>(
       this.queryURL,
       {username: username, password: hashedPassword}
+    ).pipe(
+      tap(loggedIn => {
+        this.loginChangeSource.next(loggedIn);
+      })
     );
   }
 
@@ -30,6 +37,9 @@ export class LoginService {
       this.queryURL
     ).pipe(
       map(res => true),
+      tap(loggedIn => {
+        this.loginChangeSource.next(false);
+      }),
       catchError(error => of(false))
     );
   }
