@@ -1,50 +1,97 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~bootstrap/dist/css/bootstrap.min.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+html, body { 
+  height: 100%; 
+}
+body { 
+  margin:0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  padding:0; 
+  overflow: auto; 
+}
 
 table {
   width: 100%;
 }
 
-footer {
-  position: absolute;
-  bottom: 0;
+input {
+  width:100%;
 }
 
-nav {
-  background-color: #6A4C8D;
-  padding-top: 5px;
-  padding-bottom: 5px;
+mat-form-field{
+  width:100%;
 }
 
-nav .nav-header {
-  float: left;
-  text-align: center;
-  padding: 0;
-  margin: 0;
+.navcolor{
+  color:black;
 }
 
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
+
+
+.navcolor{
+  color:black;
 }
 
-nav li {
-  float: right;
+.mat-cell, .mat-header-cell {
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-nav li a {
-  display: block;
+.table-container-400{
+  max-height: calc(100vh-400px);
+  overflow: auto;
+}
+
+.card-header{
+  height: 40px;
+}
+
+.card-body{
+  padding: 0px; 
+  margin:0px;
+}
+
+.mat-header-cell {    
+  background-color:grey;
   color: white;
-  text-align: center;
-  padding: 25px 16px;
-  text-decoration: none;
+ }
+
+a:hover {
+  background-color:royalblue;
 }
 
-nav li a:hover {
-  background-color: #2A0554;
+.headerfooter{
+  background-color: lightgreen;
+}
+
+.button-margin {
+  margin:10px;
+}
+
+.padding-zero{
+  padding:0px;
+}
+
+/* keeps the datea and datepicker in one line */
+.date_container {        
+  float: left;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+.mat-column-name{
+   flex: 0 0 30%;
+}
+
+.mat-column-unit_price{
+  flex: 0 0 25%;
+}
+
+.mat-column-quantity{
+  flex: 0 0 25%;
 }

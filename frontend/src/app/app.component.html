@@ -1,3 +1,23 @@
+<nav class="navbar navbar-light headerfooter"> 
+    <div class="navbar-brand" style="padding:10px"><h2>Amaranth Acres Ringup</h2></div>
+
+    <ul class="nav justify-content-center" >
+      
+        <ng-container *ngIf="loggedIn">
+            <li class="nav-item">
+                <a style="color:black"  class="nav-link" routerLink="/">Ring Up</a>
+            </li>
+            <li class="nav-item" *ngIf="loggedIn">
+                <a  style="color:black" class="nav-link" routerLink="/edit">Edit Product List</a>
+            </li>
+        </ng-container>
+    </ul>
+</nav>
+
+
+
+
+<!--
 <nav>
     <ul>
         <li class="nav-header">
@@ -11,11 +31,21 @@
         </li>
     </ul>
 </nav>
+-->
 
 <router-outlet></router-outlet>
 
+<footer class="footer">
+    <div class="d-flex headerfooter justify-content-center" >
+        <span><small>Amaranth Acres&copy; 2020-2021 </small></span>
+    </div>
+    
+</footer>
+
+<!--
 <footer class="footer">
     <div>
         <span><small>Amaranth Acres&copy; 2022 </small></span>
     </div>
 </footer>
+-->
