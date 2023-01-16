@@ -15,14 +15,19 @@ table {
   width: 100%;
 }
 
-input {
-  width:100%;
-}
 
 mat-form-field{
   width:100%;
 }
 
+input {
+  width:100%;
+}
+
+nav {
+  height: 80px;
+}
+
 .navcolor{
   color:black;
 }
@@ -32,19 +37,22 @@ mat-form-field{
 .navcolor{
   color:black;
 }
-
-.mat-cell, .mat-header-cell {
+/* 
+.mat-cell, .mat-header-cell {s
   padding-left: 5px;
   padding-right: 5px;
-}
+} */
 
 .table-container-400{
   max-height: calc(100vh-400px);
-  overflow: auto;
+  overflow: flex;
+  display: flex;
+  
 }
 
 .card-header{
   height: 40px;
+  background-color: lightgray;
 }
 
 .card-body{
@@ -63,6 +71,7 @@ a:hover {
 
 .headerfooter{
   background-color: lightgreen;
+
 }
 
 .button-margin {
@@ -84,14 +93,3 @@ a:hover {
 
 
 
-.mat-column-name{
-   flex: 0 0 30%;
-}
-
-.mat-column-unit_price{
-  flex: 0 0 25%;
-}
-
-.mat-column-quantity{
-  flex: 0 0 25%;
-}

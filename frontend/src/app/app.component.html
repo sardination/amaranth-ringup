@@ -1,8 +1,8 @@
-<nav class="navbar navbar-light headerfooter"> 
+<nav class="navbar fixed-top navbar-light headerfooter"> 
     <div class="navbar-brand" style="padding:10px"><h2>Amaranth Acres Ringup</h2></div>
 
-    <ul class="nav justify-content-center" >
-      
+    <ul>
+   
         <ng-container *ngIf="loggedIn">
             <li class="nav-item">
                 <a style="color:black"  class="nav-link" routerLink="/">Ring Up</a>
@@ -14,26 +14,9 @@
     </ul>
 </nav>
 
-
-
-
-<!--
-<nav>
-    <ul>
-        <li class="nav-header">
-            <h2>Amaranth Acres Ringup</h2>
-        </li>
-        <li *ngIf="loggedIn">
-            <a routerLink="/">Ring Up</a>
-        </li>
-        <li *ngIf="loggedIn">
-            <a routerLink="/edit">Edit Product List</a>
-        </li>
-    </ul>
-</nav>
--->
-
-<router-outlet></router-outlet>
+<div clas="container-fluid" style="padding-top:80px"  >
+    <router-outlet></router-outlet>
+</div>
 
 <footer class="footer">
     <div class="d-flex headerfooter justify-content-center" >
@@ -42,10 +25,3 @@
     
 </footer>
 
-<!--
-<footer class="footer">
-    <div>
-        <span><small>Amaranth Acres&copy; 2022 </small></span>
-    </div>
-</footer>
--->

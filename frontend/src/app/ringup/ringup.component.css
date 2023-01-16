@@ -1,4 +1,48 @@
-.price-input-child {
-    display: inline-block;
-    position: relative;
+
+
+
+
+     /* @media all and (min-width: 360px) {
+    .wrapper
+    {
+        display: grid;
+        grid-row-gap: 2em;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        grid-template-areas: 
+        "ringup";
+    }
+
+
+    .ringup-area{
+        grid-area: ringup;
+    }
 }
+
+
+.mat-column-name{
+    word-wrap: break-word;
+    width:40% !important;
+    padding: 5px;
+ }
+
+ .mat-column-quantity{
+    width:20% !important;
+    padding: 5px;
+ } 
+ .mat-column-unit{
+    width:20px;
+ }
+ 
+ 
+ .mat-column-unit_price{
+    width:10% !important;
+    padding: 5px;
+    
+ }
+ 
+ .mat-column-delete{
+    width:10% !important;
+    padding: 5px;
+  }  
+   */

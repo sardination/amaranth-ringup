@@ -3,8 +3,9 @@ import { MatTableDataSource } from '@angular/material/table';
 
 import { Product } from '../classes/product';
 import { ProductService } from '../services/product.service'
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faTimes, faEdit,faTrash,faCheck} from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup } from '@angular/forms';
+
 
 interface RingupProduct {
   product: Product;
@@ -25,12 +26,18 @@ export class RingupComponent implements OnInit {
   // });
 
   faTimes = faTimes;
+  faEdit = faEdit;
+  faCheck = faCheck;
+  faTrash  = faTrash;
 
-  columnsToDisplay = ['name', 'unit_price', 'quantity', 'delete'];
+
+  columnsToDisplay = ['name', 'quantity', 'unit_price', 'edit', 'delete'];
   tableDataSource: MatTableDataSource<RingupProduct>;
 
   availableProducts : Product[] = [];
-  ringupProducts : RingupProduct[] = [];
+  ringupProducts : RingupProduct[] = []; //adding product
+  editingProduct : RingupProduct | null = null;  //editing in the table
+  editingIndex : number = 0;
 
   selectedNewProduct : Product = new Product(-1, "", 0, "lb");
 
@@ -87,4 +94,27 @@ export class RingupComponent implements OnInit {
     this.tableDataSource.data = this.ringupProducts;
   }
 
-}
+
+  selectEditingProduct(editingProduct: RingupProduct): void {
+    this.tableDataSource.data = this.ringupProducts;
+    this.editingProduct = editingProduct;
+    this.editingIndex =  this.ringupProducts.indexOf(editingProduct);
+
+  }
+
+
+
+  saveEditingProduct() {
+    this.tableDataSource.data = this.ringupProducts;
+    var ringupProduct = this.editingProduct;
+    console.log(ringupProduct);
+
+    if (!ringupProduct)
+      return;
+
+
+      this.ringupProducts[this.editingIndex] =  ringupProduct;
+      this.editingProduct = null;
+
+    } 
+  }
