@@ -5,6 +5,7 @@ import { Product } from '../classes/product';
 import { ProductService } from '../services/product.service'
 import { faTimes, faEdit,faTrash,faCheck} from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup } from '@angular/forms';
+import { Observable, startWith, map } from 'rxjs';
 
 
 interface RingupProduct {
@@ -43,7 +44,8 @@ export class RingupComponent implements OnInit {
 
   productquantity : number = 0.0;
   
-
+  // Autocomplete
+  filteredProductOptions: Product[] = [];
 
   constructor(
     private productService: ProductService
@@ -53,10 +55,20 @@ export class RingupComponent implements OnInit {
         .subscribe(products => {
           this.availableProducts = products;
           this.availableProducts.push(new Product(-1, "Other", 0, "lb"));
+          this.filteredProductOptions = this.availableProducts;
         })
   }
 
   ngOnInit(): void {
+
+  }
+
+  productTypedValueChanged(e: Event) {
+    if (e && e.target) {
+      this.filteredProductOptions = this.availableProducts.filter(option =>
+        option.name.toLowerCase().indexOf((e.target as HTMLInputElement).value.toLowerCase()) === 0
+      )
+    }
   }
 
   displayInputProductFunction(product: Product | null) {
@@ -77,7 +89,11 @@ export class RingupComponent implements OnInit {
 
   addRingupProduct() : void {
     var newRingupProduct: RingupProduct = {
-      product: this.selectedNewProduct,
+      product: {
+        name: this.selectedNewProduct.name,
+        unit_price: this.selectedNewProduct.unit_price, 
+        unit: this.selectedNewProduct.unit
+      } as Product,
       quantity: this.productquantity,
     };
 
@@ -87,6 +103,7 @@ export class RingupComponent implements OnInit {
     this.productquantity = 0;
     this.selectedNewProduct =  new Product(-1, "", 0, "lb");
 
+    this.filteredProductOptions = this.availableProducts;
   }
 
   deleteRingupProduct(ringupProduct: RingupProduct) : void {
@@ -102,8 +119,6 @@ export class RingupComponent implements OnInit {
 
   }
 
-
-
   saveEditingProduct() {
     this.tableDataSource.data = this.ringupProducts;
     var ringupProduct = this.editingProduct;
@@ -111,7 +126,6 @@ export class RingupComponent implements OnInit {
 
     if (!ringupProduct)
       return;
-
 
       this.ringupProducts[this.editingIndex] =  ringupProduct;
       this.editingProduct = null;

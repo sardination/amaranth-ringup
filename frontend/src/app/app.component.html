@@ -1,7 +1,7 @@
 <nav class="navbar fixed-top navbar-light headerfooter"> 
     <div class="navbar-brand" style="padding:10px"><h2>Amaranth Acres Ringup</h2></div>
 
-    <ul>
+    <ul class="nav justify-content-center">
    
         <ng-container *ngIf="loggedIn">
             <li class="nav-item">
@@ -14,7 +14,7 @@
     </ul>
 </nav>
 
-<div clas="container-fluid" style="padding-top:80px"  >
+<div class="container-fluid router-wrapper" style="padding-top:80px"  >
     <router-outlet></router-outlet>
 </div>
 

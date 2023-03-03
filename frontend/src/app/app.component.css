@@ -1,7 +1,12 @@
 .footer{
-    position:fixed;
     left:0;
     bottom:0;
     width:100%;
     color:black;
+}
+
+.router-wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
 }

@@ -1,0 +1,7 @@
+CREATE TABLE `product` (
+ `id` int(11) NOT NULL AUTO_INCREMENT,
+ `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+ `unit_price` int(11) NOT NULL,
+ `unit` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+ PRIMARY KEY (`id`)
+);

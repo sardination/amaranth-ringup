@@ -1,8 +1,8 @@
-# Amaranth Worklog
+# Amaranth Ringup
 
 ## Local Dev
 * `php -S 127.0.0.1:8000` from `api` folder
-* `ng serve --proxy-config proxy-local.config.js --serve-path ringup` from main folder
+* `ng serve --proxy-config proxy-local.config.js --serve-path ringup` from `frontend` folder
 * `api/credentials.php`: create a file with the following format:
     ```
     <?php

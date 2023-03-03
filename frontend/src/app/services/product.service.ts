@@ -88,6 +88,7 @@ export class ProductService {
       }),
       catchError(error => {
         console.log(error)
+        product.unit_price /= 100; // Revert to original price value (product passed by reference)
         return of(null)
       })
     );
