@@ -11,6 +11,8 @@ class ProductGateway extends AbstractGateway {
                 id, name, unit_price, unit
             FROM
                 product
+            ORDER BY
+                name
         ";
 
         return $this->getRows($statement, '', []);
