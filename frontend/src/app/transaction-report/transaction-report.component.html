@@ -1,0 +1,160 @@
+<div class="card-header">
+    <h4>Transaction Report</h4>
+</div>
+
+<div class="card-body">
+
+        <div class="row" style="padding:10px" >
+            <div class="col-sm-6" >
+                <div class="row" >
+                    <div class="col-sm-5 date_container" style="padding:0px;"  >
+                        <mat-form-field >
+                            <input matInput [matDatepicker]="dateRangeStartPicker" [(ngModel)]="dateRangeStart" (ngModelChange)="verifyAndFixDates()">
+                            <mat-datepicker-toggle matSuffix [for]="dateRangeStartPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #dateRangeStartPicker></mat-datepicker>
+                        </mat-form-field >
+                    </div>
+
+                    <div class="col-sm-2 date_container" style="padding:0px;">
+                        through
+                    </div>
+
+                    <div class="col-sm-5 date_container" style="padding:0px">
+                        <mat-form-field>
+                            <input matInput
+                                    [matDatepicker]="dateRangeEndPicker"  [(ngModel)]="dateRangeEnd" (ngModelChange)="verifyAndFixDates()">
+                            <mat-datepicker-toggle matSuffix [for]="dateRangeEndPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #dateRangeEndPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3 date_container">
+                <button mat-raised-button color="primary" (click)="updateTransactions()">Go</button>
+            </div>
+
+            <div class="col-sm-3 date_container">
+                <button mat-raised-button color="primary" (click)="exportAggregates()">Export Aggregates to CSV</button>
+            </div>
+      </div>
+
+      <div class="row">
+        <table mat-table [dataSource]="selectedTransactions" matSort multiTemplateDataRows>
+            <ng-container matColumnDef="transaction_id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Transaction ID</th>
+                <td mat-cell *matCellDef="let transaction">
+                    {{ transaction.transaction.id }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="timestamp">
+                <th mat-header-cell *matHeaderCellDef>Timestamp</th>
+                <td mat-cell *matCellDef="let transaction">
+                    {{ transaction.transaction.complete_time.toLocaleString() }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="transaction_total">
+                <th mat-header-cell *matHeaderCellDef>Transaction Total</th>
+                <td mat-cell *matCellDef="let transaction">
+                    ${{ transaction.transaction_total | number : '1.2-2' }}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="expand">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let transaction">
+                    <div *ngIf="transaction !== expandedTransaction; else showHide">
+                        <button mat-button (click)="expandTransaction(transaction)" class="icon-button">
+                            <fa-icon [icon]="faPlus"></fa-icon>
+                        </button>
+                    </div>
+                    <ng-template #showHide>
+                        <button mat-button (click)="collapseTransaction()" class="icon-button">
+                            <fa-icon [icon]="faMinus"></fa-icon>
+                        </button>
+                    </ng-template>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="reprint_receipt">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let transaction">
+                    <button mat-button (click)="reprintReceipt(transaction)" class="icon-button">
+                        <fa-icon [icon]="faPrint"></fa-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="export_csv">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let transaction">
+                    <button mat-button (click)="exportCsv(transaction)" class="icon-button">
+                        <fa-icon [icon]="faList"></fa-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <!-- Expanded Content Column -->
+            <ng-container matColumnDef="expandedDetail">
+                <td mat-cell *matCellDef="let transaction" [attr.colspan]="columnsToDisplay.length">
+                    <div class="transaction-detail"
+                    [@detailExpand]="transaction == expandedTransaction ? 'expanded' : 'collapsed'">
+                        <div *ngIf="expandedTransaction != null" style="width: 100%">
+                            <div class="transaction-info-segment">
+                                <table mat-table [dataSource]="expandedTransaction.line_items" matSort>
+                                    <ng-container matColumnDef="product_name">
+                                        <th mat-header-cell *matHeaderCellDef>Product Name</th>
+                                        <td mat-cell *matCellDef="let line_item">
+                                            {{ line_item.line_item.product_name }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="quantity">
+                                        <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                                        <td mat-cell *matCellDef="let line_item">
+                                            {{ line_item.line_item.quantity | number : '1.2-2' }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="unit_price">
+                                        <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+                                        <td mat-cell *matCellDef="let line_item">
+                                            ${{ line_item.line_item.unit_price | number : '1.2-2' }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="unit">
+                                        <th mat-header-cell *matHeaderCellDef>Unit</th>
+                                        <td mat-cell *matCellDef="let line_item">
+                                            {{ line_item.line_item.unit }}
+                                        </td>
+                                    </ng-container>
+
+                                    <ng-container matColumnDef="total_cost">
+                                        <th mat-header-cell *matHeaderCellDef>Total Cost</th>
+                                        <td mat-cell *matCellDef="let line_item">
+                                            ${{ line_item.total_cost | number : '1.2-2' }}
+                                        </td>
+                                    </ng-container>
+
+                                    <tr mat-header-row *matHeaderRowDef="expandedColumnsToDisplay"></tr>
+                                    <tr mat-row *matRowDef="let expandedRowData; columns: expandedColumnsToDisplay"></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+            <!-- End Expanded Content -->
+
+            <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+            <tr mat-row *matRowDef="let transaction; columns: columnsToDisplay;"
+                class="transaction-row"
+                [class.expanded-row]="expandedTransaction === transaction">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="detail-row"></tr>
+        </table>
+    </div>
+</div>

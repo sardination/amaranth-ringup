@@ -25,6 +25,8 @@ foreach ($dir as $fileinfo) {
 }
 
 use controllers\ProductController;
+use controllers\TransactionController;
+use controllers\LineItemController;
 use controllers\LoginController;
 
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -51,6 +53,10 @@ if ($path == 'login') {
     $controller = new LoginController($conn, $requestMethod);
 } else if ($path == 'product') {
     $controller = new ProductController($conn, $requestMethod);
+} else if ($path == 'transaction') {
+    $controller = new TransactionController($conn, $requestMethod);
+} else if ($path == 'line_item') {
+    $controller = new LineItemController($conn, $requestMethod);
 } else {
     header("HTTP/1.1 404 Not Found");
     exit();

@@ -48,14 +48,14 @@ class LoginController extends AbstractController {
     private function login() {
       
         //for local testing 
-		/*
+
 		$username_hash = "4663e84fea2915e34413e6710715d59f54caf9bc"; // TEMP - indhu
         $password_hash = "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"; // TEMP - password
-		*/
+
 
 	
-		$username_hash = "974760ce57c52dcee788e0ae0f86c84900a338e1"; 
-        $password_hash = "0460534b06c41443eeabff49e956d8599dc48ff1"; 
+		// $username_hash = "974760ce57c52dcee788e0ae0f86c84900a338e1";
+        // $password_hash = "0460534b06c41443eeabff49e956d8599dc48ff1";
 		
 
         $input = (array) json_decode(file_get_contents('php://input'), TRUE);

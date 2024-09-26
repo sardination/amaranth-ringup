@@ -147,7 +147,16 @@
     </div>
 
     <p style="padding-left:15px">Total: <strong>${{ ringupTotal() | number: '1.2-2' }}</strong></p>
-    <button mat-raised-button (click)="createPdf()">
-        Print Receipt
+    <button mat-raised-button color="primary" (click)="completeTransaction()" *ngIf="createdTransaction == null || successfulLineItems != ringupProducts.length; else showReprintReceipt">
+        Complete Transaction
     </button>
+    <ng-template #showReprintReceipt>
+        <button style="margin-right:15px" mat-raised-button (click)="reprintReceipt()">
+            Reprint Receipt
+        </button>
+
+        <button mat-raised-button (click)="exportCsv()">
+            Export CSV
+        </button>
+    </ng-template>
 </div>

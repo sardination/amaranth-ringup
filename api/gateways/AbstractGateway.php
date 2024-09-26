@@ -86,6 +86,7 @@ abstract class AbstractGateway {
         try {
             return $this->executeSQL($statement, $bind_types, $bind_args)->rowCount();
         } catch (\PDOException $e) {
+            error_log(print_r($e->getMessage(), true));
             // exit($e->getMessage());
             return 0;
         }

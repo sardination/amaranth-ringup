@@ -2,7 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { Product } from '../classes/product';
-import { ProductService } from '../services/product.service'
+import { ProductService } from '../services/product.service';
+import { Transaction } from '../classes/transaction';
+import { TransactionService } from '../services/transaction.service';
+import { LineItem } from '../classes/line-item';
+import { LineItemService } from '../services/line-item.service';
+import Utils from '../utils';
 import { faTimes, faEdit,faTrash,faCheck} from '@fortawesome/free-solid-svg-icons';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, startWith, map } from 'rxjs';
@@ -48,8 +53,14 @@ export class RingupComponent implements OnInit {
   // Autocomplete
   filteredProductOptions: Product[] = [];
 
+  createdTransaction: Transaction | null = null;
+  createdLineItems: (LineItem | null)[] = [];
+  successfulLineItems: number = 0;
+
   constructor(
-    private productService: ProductService
+    private productService: ProductService,
+    private transactionService: TransactionService,
+    private lineItemService: LineItemService,
   ) {
     this.tableDataSource = new MatTableDataSource<RingupProduct>();
     this.productService.getAllProducts()
@@ -132,92 +143,74 @@ export class RingupComponent implements OnInit {
 
       this.ringupProducts[this.editingIndex] =  ringupProduct;
       this.editingProduct = null;
-
   }
 
-  async createPdf() {
-    const pdfDoc = await PDFDocument.create();
-    const courierBoldFont = await pdfDoc.embedFont(StandardFonts.CourierBold);
-    const courierFont = await pdfDoc.embedFont(StandardFonts.Courier);
+  completeTransaction(): void {
+    // Don't re-create the same transaction
+    if (this.createdTransaction == null) {
+      // Create transaction
+      this.transactionService.createTransaction(
+        new Transaction(-1, new Date())
+      ).subscribe(transaction => {
+        if (transaction) {
+          this.ringupProducts.forEach((ringupProduct, productIndex) => {
+            this.createdLineItems.push(null)
+            this.lineItemService.createLineItem(
+              // Create line items
+              new LineItem(-1, transaction.id, ringupProduct.product.name, ringupProduct.quantity, ringupProduct.product.unit, ringupProduct.product.unit_price)
+            ).subscribe(line_item => {
+              if (line_item) {
+                this.createdLineItems[productIndex] = line_item;
+                this.successfulLineItems++;
+                if (this.successfulLineItems == this.ringupProducts.length) {
+                  Utils.createReceiptPdf(transaction, this.createdLineItems.map(lineItem => lineItem!));
+                }
+              }
+            })
+          })
 
-    const page = pdfDoc.addPage();
-    const { width, height } = page.getSize();
+          this.createdTransaction = transaction;
+        }
+      })
+    } else {
+      this.createdLineItems.forEach((createdLineItem, lineItemIndex) => {
+        if (createdLineItem != null) {
+          return;
+        }
+        let ringupProduct = this.ringupProducts[lineItemIndex];
+        this.lineItemService.createLineItem(
+          // Create line items
+          new LineItem(-1, this.createdTransaction!.id, ringupProduct.product.name, ringupProduct.quantity, ringupProduct.product.unit, ringupProduct.product.unit_price)
+        ).subscribe(line_item => {
+          this.createdLineItems[lineItemIndex] = line_item
+          if (this.successfulLineItems == this.ringupProducts.length) {
+            Utils.createReceiptPdf(this.createdTransaction!, this.createdLineItems.map(lineItem => lineItem!));
+          }
+        })
+      })
+    }
+  }
 
-    const titleFontSize = 20;
-    const fontSize = 14;
+  reprintReceipt() : void {
+    if (!this.createdTransaction) {
+      return;
+    }
+    if (this.successfulLineItems != this.ringupProducts.length) {
+      return;
+    }
 
-    const titleFontY = height - 4 * titleFontSize;
-    const title = 'Amaranth Acres';
-    page.drawText(title, {
-      x: width / 2 - courierBoldFont.widthOfTextAtSize(title, titleFontSize) / 2,
-      y: titleFontY,
-      size: titleFontSize,
-      font: courierBoldFont,
-      color: rgb(0, 0, 0),
-    });
+    Utils.createReceiptPdf(this.createdTransaction, this.createdLineItems.map(lineItem => lineItem!));
+  }
 
-    const subtitleFontY = titleFontY - titleFontSize;
-    const subtitle = `${(new Date()).toLocaleString()}`;
-    page.drawText(subtitle, {
-      x: width / 2 - courierFont.widthOfTextAtSize(subtitle, fontSize) / 2,
-      y: subtitleFontY,
-      size: fontSize,
-      font: courierFont,
-      color: rgb(0, 0, 0),
-    });
+  exportCsv(): void {
+    if (!this.createdTransaction) {
+      return;
+    }
+    if (this.successfulLineItems != this.ringupProducts.length) {
+      return;
+    }
 
-    // Items
-    this.ringupProducts.forEach((ringupProduct, i) => {
-      const lineY = subtitleFontY - 40 - (i * 4) * fontSize;
-      // Product name
-      page.drawText(ringupProduct.product.name.toUpperCase(), {
-        x: 50,
-        y: lineY,
-        size: fontSize,
-        font: courierFont,
-        color: rgb(0, 0, 0),
-      });
-      // Quantity and unit price
-      page.drawText(`Qty ${ringupProduct.quantity} ${ringupProduct.product.unit} @ \$${ringupProduct.product.unit_price}/${ringupProduct.product.unit}`, {
-        x: 70,
-        y: lineY - fontSize,
-        size: fontSize,
-        font: courierFont,
-        color: rgb(0, 0, 0)
-      });
-      // Subtotal
-      const subtotalString = `\$${this.ringupSubtotal(ringupProduct).toFixed(2)}`;
-      page.drawText(subtotalString, {
-        x: width - 70 - courierFont.widthOfTextAtSize(subtotalString, fontSize),
-        y: lineY,
-        size: fontSize,
-        font: courierFont,
-        color: rgb(0, 0, 0),
-      });
-    })
-
-    // Total
-    const totalString = `\$${this.ringupTotal().toFixed(2)}`;
-    const totalY = titleFontY - 40 - 4 * (this.ringupProducts.length + 1) * fontSize;
-    page.drawText(totalString, {
-      x: width - 70 - courierBoldFont.widthOfTextAtSize(totalString, fontSize),
-      y: totalY,
-      size: fontSize,
-      font: courierBoldFont,
-      color: rgb(0, 0, 0)
-    });
-    page.drawText('Total:', {
-      x: width - 300,
-      y: totalY,
-      size: fontSize,
-      font: courierBoldFont,
-      color: rgb(0, 0, 0),
-    });
-
-    const pdfBytes = await pdfDoc.save();
-
-    var blob = new Blob([pdfBytes], {type: "application/pdf"});
-    saveAs(blob, "pdf-lib_creation_example.pdf");
+    Utils.createReceiptCsv(this.createdTransaction, this.createdLineItems.map(lineItem => lineItem!));
   }
 
 }

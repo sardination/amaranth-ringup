@@ -1,0 +1,36 @@
+table {
+  width: 100%;
+}
+
+tr.detail-row {
+  height: 0;
+}
+
+/*tr.transaction-row:not(.expanded-row):hover {
+  background: whitesmoke;
+}
+
+tr.transaction-row:not(.expanded-row):active {
+  background: #efefef;
+}*/
+
+.transaction-row td {
+  border-bottom-width: 0;
+}
+
+.transaction-detail {
+  overflow: hidden;
+  display: flex;
+}
+
+.transaction-info-segment {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.transaction-info-piece {
+  flex-wrap: wrap;
+  flex: 1;
+}
